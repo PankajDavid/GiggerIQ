@@ -1,6 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
 
-const MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
+// Try the configured model first, then stable fallbacks in case a model ID is retired.
+const MODELS = [
+  ...new Set([process.env.GEMINI_MODEL, "gemini-flash-latest", "gemini-2.5-flash"].filter(Boolean)),
+] as string[];
 const TIMEOUT_MS = 25_000;
 
 let client: GoogleGenAI | null = null;
@@ -21,16 +24,27 @@ export async function generate(system: string, user: string, image?: GeminiImage
   const parts: Array<Record<string, unknown>> = [{ text: user }];
   if (image) parts.push({ inlineData: { mimeType: image.mimeType, data: image.data } });
 
-  const call = getClient().models.generateContent({
-    model: MODEL,
-    contents: [{ role: "user", parts }],
-    config: { systemInstruction: system, temperature: 0.3, maxOutputTokens: 1024 },
-  });
-  const timeout = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error("timeout")), TIMEOUT_MS),
-  );
-  const res = await Promise.race([call, timeout]);
-  const text = res.text?.trim();
-  if (!text) throw new Error("empty response");
-  return text;
+  let lastError: unknown;
+  for (const model of MODELS) {
+    try {
+      const call = getClient().models.generateContent({
+        model,
+        contents: [{ role: "user", parts }],
+        config: { systemInstruction: system, temperature: 0.3, maxOutputTokens: 2048 },
+      });
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("timeout")), TIMEOUT_MS),
+      );
+      const res = await Promise.race([call, timeout]);
+      const text = res.text?.trim();
+      if (!text) throw new Error("empty response");
+      return text;
+    } catch (err) {
+      lastError = err;
+      // Log only the provider error (status + short message), never user content.
+      const msg = err instanceof Error ? err.message.slice(0, 200) : String(err);
+      console.error(`gemini error model=${model}: ${msg}`);
+    }
+  }
+  throw lastError;
 }
