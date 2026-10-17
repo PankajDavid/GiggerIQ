@@ -5,11 +5,11 @@ import { computeTotals, earningSchema, parseStoredEarnings, MAX_ENTRIES, type Ea
 import { T, MODE_LABELS } from "@/lib/i18n";
 import type { Lang, Mode } from "@/lib/validation";
 
-const STORAGE_KEY = "gig-saathi-earnings";
+const STORAGE_KEY = "giggeriq-earnings";
 type AskMode = Exclude<Mode, "earnings">;
 interface AskResult { answer?: string; error?: string; sources?: { name: string; link: string }[] }
 
-async function askSaathi(payload: object): Promise<AskResult> {
+async function askGiggerIQ(payload: object): Promise<AskResult> {
   try {
     const res = await fetch("/api/ask", {
       method: "POST",
@@ -120,7 +120,7 @@ function EarningsTab({ lang }: { lang: Lang }) {
 
   const analyse = async () => {
     setBusy(true);
-    setResult(await askSaathi({ mode: "earnings", lang, entries }));
+    setResult(await askGiggerIQ({ mode: "earnings", lang, entries }));
     setBusy(false);
   };
 
@@ -195,7 +195,7 @@ function AskTab({ lang }: { lang: Lang }) {
       if (file.size > 4 * 1024 * 1024) { setResult({ error: "Image must be under 4 MB." }); setBusy(false); return; }
       image = { mimeType: file.type, data: await fileToBase64(file) };
     }
-    setResult(await askSaathi({ mode, lang, text, image }));
+    setResult(await askGiggerIQ({ mode, lang, text, image }));
     setBusy(false);
   };
 
@@ -239,7 +239,7 @@ export default function Home() {
     <main lang={lang}>
       <header>
         <div>
-          <h1>Gig Saathi</h1>
+          <h1>GiggerIQ</h1>
           <p className="tagline">{t.tagline}</p>
         </div>
         <div>

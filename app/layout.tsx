@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Gig Saathi",
+  title: "GiggerIQ",
   description: "AI companion for Indian gig workers: earnings, safety, schemes, documents and complaints.",
 };
 

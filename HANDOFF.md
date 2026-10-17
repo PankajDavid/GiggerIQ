@@ -2,7 +2,7 @@
 
 ## Done
 - Earnings tracking (localStorage, zod-validated read/write) + AI summary
-- Ask Saathi: complaint letter, safety tips, grounded welfare schemes, document photo explanation
+- Ask GiggerIQ: complaint letter, safety tips, grounded welfare schemes, document photo explanation
 - English / Hindi
 - Security controls listed in README
 - 8 Vitest tests passing; production build passing

@@ -1,4 +1,4 @@
-# Gig Saathi
+# GiggerIQ
 
 A mobile-first GenAI companion for Indian gig and informal workers (delivery partners, drivers, daily-wage workers). Built for the PromptWars Chandigarh warm-up challenge "Gig Worker Companion".
 
@@ -35,7 +35,7 @@ Gig platforms (Swiggy, Zomato, Uber, Rapido and others) offer no public API for 
 
 - Gemini API key is server-side only, read from environment variables; `.env` is git-ignored.
 - Same-origin check on the API; all input validated with `zod` (text max 1000 chars, fixed modes and languages).
-- Rate limiting: 10 requests per minute per IP, plus a hard daily cap on Gemini calls (`DAILY_AI_CAP`). When limits are hit, users see "Saathi is busy" instead of the app making unlimited paid calls.
+- Rate limiting: 10 requests per minute per IP, plus a hard daily cap on Gemini calls (`DAILY_AI_CAP`). When limits are hit, users see "GiggerIQ is busy" instead of the app making unlimited paid calls.
 - Uploads: JPG, PNG or WebP only, max 4 MB, and the **actual file bytes** are checked, not just the declared type. Images are processed in memory and never stored or logged.
 - AI output is treated as untrusted and always rendered as plain text, never HTML. User and document text is passed to the model as data, never as instructions.
 - No user text, images or IP addresses are logged. Complaint text is never stored.

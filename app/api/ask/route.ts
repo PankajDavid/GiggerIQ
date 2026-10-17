@@ -7,7 +7,7 @@ import { generate } from "@/lib/gemini";
 
 export const runtime = "nodejs";
 
-const BUSY = "Saathi is busy right now. Please try again in a minute.";
+const BUSY = "GiggerIQ is busy right now. Please try again in a minute.";
 const DONT_KNOW =
   "I don't know based on the verified scheme information I have. Please check https://eshram.gov.in or visit your nearest Common Service Centre.";
 
